@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== TICKET ====================
+// Representa cada senha emitida
+model Ticket {
+  id            String   @id @default(cuid())
+  token         String   @unique // Formato: YYMMDD-PPSQ (ex: 260515-SP01)
+  type          String   // SP (Prioritária), SE (Exames), SG (Geral)
+  status        String   // AGUARDANDO, ATENDENDO, ATENDIDO, NAO_COMPARECEU
+  
+  // Timestamps
+  createdAt     DateTime @default(now())
+  startedAt     DateTime?
+  finishedAt    DateTime?
+  
+  // Relação com guichê
+  guicheId      String?
+  guiche        Guiche?  @relation(fields: [guicheId], references: [id], onDelete: SetNull)
+  
+  // Relação com log de atendimento
+  logAtendimento LogAtendimento?
+  
+  @@index([createdAt])
+  @@index([status])
+  @@index([type])
+}
+
+// ==================== GUICHE ====================
+// Representa cada guichê (atendente)
+model Guiche {
+  id            String   @id @default(cuid())
+  numero        Int      @unique // 1, 2, 3, etc
+  status        String   @default("LIVRE") // LIVRE, OCUPADO
+  
+  // Timestamps
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relação com tickets
+  tickets       Ticket[]
+  
+  // Relação com logs
+  logsAtendimento LogAtendimento[]
+  
+  @@index([status])
+}
+
+// ==================== LOG ATENDIMENTO ====================
+// Histórico detalhado de cada atendimento
+model LogAtendimento {
+  id            String   @id @default(cuid())
+  ticketId      String   @unique
+  ticket        Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  
+  guicheId      String
+  guiche        Guiche   @relation(fields: [guicheId], references: [id], onDelete: Cascade)
+  
+  // Tempos
+  startedAt     DateTime
+  finishedAt    DateTime
+  duracao       Int      // Em segundos
+  
+  // Informações adicionais
+  statusFinal   String   // ATENDIDO, NAO_COMPARECEU
+  observacoes   String?  @db.Text
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([ticketId])
+  @@index([guicheId])
+  @@index([createdAt])
+}
