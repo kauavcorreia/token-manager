@@ -4,3 +4,4 @@ export enum TicketType {
   SE = 'SE', // Senha de Exames
   SG = 'SG', // Senha Geral
 }
+
