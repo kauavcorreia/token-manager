@@ -10,10 +10,12 @@ import { AuthController } from './auth.controller';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
+      
+      // Configurações do JWT usando valores do ConfigService
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET') || 'default_jwt_secret',
         signOptions: {
-          expiresIn: configService.getNumber('JWT_EXPIRES_IN') || 3600,
+          expiresIn: configService.getNumber('JWT_EXPIRES_IN') || 3600, // 1 hora
         },
       }),
     }),
@@ -23,3 +25,5 @@ import { AuthController } from './auth.controller';
   exports: [AuthService],
 })
 export class AuthModule {}
+
+
