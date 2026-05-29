@@ -1,0 +1,37 @@
+<div class="totem-wrap">
+  <header class="totem-header">
+    <span class="brand">WebTickets</span>
+    <span class="sub">Laboratório Médico</span>
+  </header>
+
+  <div class="ticket-emitido" *ngIf="ticketEmitido" [class.pop]="animando">
+    <div class="ticket-card" [ngClass]="ticketEmitido.tipo.toLowerCase()">
+      <span class="card-label">{{ tipoLabel }}</span>
+      <span class="card-numero">{{ ticketEmitido.numeracao }}</span>
+      <span class="card-hora">Emitido às {{ ticketEmitido.dataHoraEmissao | date:'HH:mm:ss' }}</span>
+      <span class="card-aviso">Aguarde ser chamado no painel</span>
+    </div>
+    <button class="btn-nova" (click)="nova()">Nova Senha</button>
+  </div>
+
+  <div class="selecao" *ngIf="!ticketEmitido">
+    <p class="instrucao">Selecione o tipo de atendimento:</p>
+    <div class="grid-tipos">
+      <button class="tipo sp" (click)="emitir('SP')">
+        <span class="tipo-sigla">SP</span>
+        <span class="tipo-nome">Prioritário</span>
+        <span class="tipo-desc">Gestante · Idoso · PCD</span>
+      </button>
+      <button class="tipo sg" (click)="emitir('SG')">
+        <span class="tipo-sigla">SG</span>
+        <span class="tipo-nome">Geral</span>
+        <span class="tipo-desc">Atendimento convencional</span>
+      </button>
+      <button class="tipo se" (click)="emitir('SE')">
+        <span class="tipo-sigla">SE</span>
+        <span class="tipo-nome">Exames</span>
+        <span class="tipo-desc">Retirada de resultados</span>
+      </button>
+    </div>
+  </div>
+</div>

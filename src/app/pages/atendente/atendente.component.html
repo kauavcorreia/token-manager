@@ -1,0 +1,65 @@
+<div class="at-wrap">
+  <h1 class="titulo">Painel da Atendente</h1>
+
+  <div class="msg" *ngIf="msg" [ngClass]="msgTipo">{{ msg }}</div>
+
+  <section class="secao">
+    <h2 class="secao-titulo">Situação das Filas</h2>
+    <div class="filas-grid">
+      <div class="fila-card sp">
+        <span class="fila-sigla">SP</span>
+        <span class="fila-count">{{ filas.SP.length }}</span>
+        <span class="fila-label">Prioritário</span>
+      </div>
+      <div class="fila-card se">
+        <span class="fila-sigla">SE</span>
+        <span class="fila-count">{{ filas.SE.length }}</span>
+        <span class="fila-label">Exames</span>
+      </div>
+      <div class="fila-card sg">
+        <span class="fila-sigla">SG</span>
+        <span class="fila-count">{{ filas.SG.length }}</span>
+        <span class="fila-label">Geral</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2 class="secao-titulo">Guichês</h2>
+    <div class="guiches-lista">
+      <div class="guiche-row" *ngFor="let g of guiches" [class.ocupado]="!g.disponivel">
+        <div class="g-info">
+          <span class="g-num">Guichê {{ g.numero }}</span>
+          <span class="g-status" [class.livre]="g.disponivel">
+            {{ g.disponivel ? 'Disponível' : 'Em atendimento' }}
+          </span>
+          <span class="g-ticket" *ngIf="g.ticketAtual">{{ g.ticketAtual.numeracao }}</span>
+        </div>
+        <button class="btn-chamar" (click)="chamar(g.numero)" [disabled]="!g.disponivel">
+          Chamar Próximo
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" *ngIf="chamadas.length > 0">
+    <h2 class="secao-titulo">Últimas Chamadas</h2>
+    <table class="tabela">
+      <thead>
+        <tr><th>Numeração</th><th>Tipo</th><th>Guichê</th><th>Hora</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of chamadas" [ngClass]="t.tipo.toLowerCase()">
+          <td class="mono">{{ t.numeracao }}</td>
+          <td><span class="badge" [ngClass]="t.tipo.toLowerCase()">{{ t.tipo }}</span></td>
+          <td>{{ t.guiche }}</td>
+          <td>{{ t.dataHoraAtendimento | date:'HH:mm:ss' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="encerrar-area">
+    <button class="btn-encerrar" (click)="encerrar()">Encerrar Expediente</button>
+  </div>
+</div>
