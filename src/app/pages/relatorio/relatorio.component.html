@@ -1,0 +1,100 @@
+<div class="rel-wrap">
+  <h1 class="titulo">Relatórios</h1>
+
+  <div class="filtro-card">
+    <div class="tabs">
+      <button class="tab" [class.ativo]="tipo === 'diario'" (click)="tipo = 'diario'">Diário</button>
+      <button class="tab" [class.ativo]="tipo === 'mensal'" (click)="tipo = 'mensal'">Mensal</button>
+    </div>
+
+    <div class="campos">
+      <div *ngIf="tipo === 'diario'">
+        <label class="campo-label">Data</label>
+        <input type="date" [(ngModel)]="data" class="campo-input" />
+      </div>
+      <div class="mes-ano" *ngIf="tipo === 'mensal'">
+        <div>
+          <label class="campo-label">Mês</label>
+          <select [(ngModel)]="mes" class="campo-input">
+            <option *ngFor="let m of meses; let i = index" [value]="i + 1">{{ m }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="campo-label">Ano</label>
+          <input type="number" [(ngModel)]="ano" class="campo-input" min="2020" max="2099" style="width:90px" />
+        </div>
+      </div>
+      <button class="btn-gerar" (click)="gerar()">Gerar Relatório</button>
+    </div>
+  </div>
+
+  <div class="resultado" *ngIf="relatorio">
+    <h2 class="periodo">{{ relatorio.periodo }}</h2>
+
+    <div class="resumo-grid">
+      <div class="resumo-card">
+        <span class="rv">{{ relatorio.totalEmitidas }}</span>
+        <span class="rl">Senhas Emitidas</span>
+      </div>
+      <div class="resumo-card">
+        <span class="rv">{{ relatorio.totalAtendidas }}</span>
+        <span class="rl">Senhas Atendidas</span>
+      </div>
+      <div class="resumo-card">
+        <span class="rv">{{ taxa(relatorio.totalEmitidas, relatorio.totalAtendidas) }}</span>
+        <span class="rl">Taxa de Atendimento</span>
+      </div>
+    </div>
+
+    <h3 class="sub-titulo">Por Prioridade</h3>
+    <div class="prio-grid">
+      <div class="prio-card sp">
+        <span class="pc-titulo">SP — Prioritário</span>
+        <div class="pc-row"><span>Emitidas</span><strong>{{ relatorio.emitidas.SP }}</strong></div>
+        <div class="pc-row"><span>Atendidas</span><strong>{{ relatorio.atendidas.SP }}</strong></div>
+        <div class="pc-row"><span>TM médio</span><strong>{{ relatorio.tmMedio.SP | number:'1.1-1' }} min</strong></div>
+      </div>
+      <div class="prio-card se">
+        <span class="pc-titulo">SE — Exames</span>
+        <div class="pc-row"><span>Emitidas</span><strong>{{ relatorio.emitidas.SE }}</strong></div>
+        <div class="pc-row"><span>Atendidas</span><strong>{{ relatorio.atendidas.SE }}</strong></div>
+        <div class="pc-row"><span>TM médio</span><strong>{{ relatorio.tmMedio.SE | number:'1.1-1' }} min</strong></div>
+      </div>
+      <div class="prio-card sg">
+        <span class="pc-titulo">SG — Geral</span>
+        <div class="pc-row"><span>Emitidas</span><strong>{{ relatorio.emitidas.SG }}</strong></div>
+        <div class="pc-row"><span>Atendidas</span><strong>{{ relatorio.atendidas.SG }}</strong></div>
+        <div class="pc-row"><span>TM médio</span><strong>{{ relatorio.tmMedio.SG | number:'1.1-1' }} min</strong></div>
+      </div>
+    </div>
+
+    <h3 class="sub-titulo">Detalhamento das Senhas</h3>
+    <div class="tabela-wrap">
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Numeração</th><th>Tipo</th><th>Emissão</th>
+            <th>Atendimento</th><th>Guichê</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of relatorio.tickets" [ngClass]="t.tipo.toLowerCase()">
+            <td class="mono">{{ t.numeracao }}</td>
+            <td><span class="badge" [ngClass]="t.tipo.toLowerCase()">{{ t.tipo }}</span></td>
+            <td>{{ t.dataHoraEmissao | date:'HH:mm:ss' }}</td>
+            <td>{{ t.dataHoraAtendimento ? (t.dataHoraAtendimento | date:'HH:mm:ss') : '—' }}</td>
+            <td>{{ t.guiche || '—' }}</td>
+            <td>
+              <span class="status" [ngClass]="t.atendida ? 'ok' : t.descartada ? 'desc' : 'pend'">
+                {{ t.atendida ? 'Atendida' : t.descartada ? 'Descartada' : 'Pendente' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="sem-dados" *ngIf="relatorio.tickets.length === 0">
+        Nenhuma senha encontrada para este período.
+      </p>
+    </div>
+  </div>
+</div>

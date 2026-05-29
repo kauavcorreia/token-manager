@@ -1,0 +1,203 @@
+.rel-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 28px 20px;
+}
+
+.titulo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1565c0;
+  margin: 0 0 22px;
+}
+
+.filtro-card {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 26px;
+}
+
+.tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+
+.tab {
+  padding: 7px 18px;
+  border-radius: 7px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  color: #78909c;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.tab.ativo { background: #1565c0; border-color: #1565c0; color: #fff; }
+
+.campos {
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.mes-ano { display: flex; gap: 10px; }
+
+.campo-label {
+  display: block;
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #90a4ae;
+  margin-bottom: 5px;
+}
+
+.campo-input {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-size: .83rem;
+  color: #263238;
+  outline: none;
+}
+
+.campo-input:focus { border-color: #1565c0; }
+
+.btn-gerar {
+  background: #1565c0;
+  border: none;
+  color: #fff;
+  padding: 8px 22px;
+  border-radius: 7px;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-gerar:hover { background: #1976d2; }
+
+/* resultado */
+.periodo {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #546e7a;
+  margin: 0 0 16px;
+}
+
+.resumo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.resumo-card {
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rv { font-size: 2rem; font-weight: 800; color: #1565c0; line-height: 1; }
+.rl { font-size: .68rem; color: #90a4ae; text-transform: uppercase; letter-spacing: .08em; }
+
+.sub-titulo {
+  font-size: .65rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #90a4ae;
+  margin: 0 0 12px;
+  font-weight: 400;
+}
+
+.prio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.prio-card {
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.prio-card.sp { background: #e3f2fd; border: 1px solid #90caf9; }
+.prio-card.sg { background: #e8f5e9; border: 1px solid #a5d6a7; }
+.prio-card.se { background: #f3e5f5; border: 1px solid #ce93d8; }
+
+.pc-titulo { font-size: .78rem; font-weight: 700; color: #455a64; margin-bottom: 4px; }
+
+.pc-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: .78rem;
+  color: #78909c;
+}
+.pc-row strong { color: #263238; }
+
+/* tabela */
+.tabela-wrap { overflow-x: auto; }
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .78rem;
+  min-width: 580px;
+}
+
+.tabela th {
+  text-align: left;
+  padding: 7px 10px;
+  color: #90a4ae;
+  font-size: .62rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-bottom: 1.5px solid #e0e0e0;
+}
+
+.tabela td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #f5f5f5;
+  color: #546e7a;
+}
+
+.tabela tr.sp td { border-left: 2.5px solid #1565c0; }
+.tabela tr.sg td { border-left: 2.5px solid #2e7d32; }
+.tabela tr.se td { border-left: 2.5px solid #6a1b9a; }
+
+.mono { font-family: monospace; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: .68rem;
+  font-weight: 700;
+}
+
+.badge.sp { background: #e3f2fd; color: #0d47a1; }
+.badge.sg { background: #e8f5e9; color: #1b5e20; }
+.badge.se { background: #f3e5f5; color: #4a148c; }
+
+.status {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: .68rem;
+  font-weight: 600;
+}
+
+.status.ok { background: #e8f5e9; color: #1b5e20; }
+.status.desc { background: #ffebee; color: #b71c1c; }
+.status.pend { background: #fff8e1; color: #e65100; }
+
+.sem-dados { color: #90a4ae; text-align: center; padding: 24px; font-size: .85rem; }

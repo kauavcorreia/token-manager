@@ -1,0 +1,41 @@
+<div class="painel-wrap">
+  <header class="painel-header">
+    <span class="brand">WebTickets — Painel</span>
+    <span class="relogio">{{ hora | date:'HH:mm:ss' }}</span>
+  </header>
+
+  <section class="secao-atual">
+    <p class="secao-label">SENHA ATUAL</p>
+    <div class="atual-card" *ngIf="atual" [ngClass]="atual.tipo.toLowerCase()">
+      <span class="atual-tipo">{{ atual.tipo }}</span>
+      <span class="atual-numero">{{ atual.numeracao }}</span>
+      <span class="atual-guiche">GUICHÊ {{ atual.guiche }}</span>
+    </div>
+    <div class="atual-vazio" *ngIf="!atual">Aguardando atendimentos...</div>
+  </section>
+
+  <section class="secao-guiches">
+    <p class="secao-label">GUICHÊS</p>
+    <div class="guiches-grid">
+      <div class="guiche" *ngFor="let g of guiches" [class.ocupado]="!g.disponivel">
+        <span class="g-num">{{ g.numero }}</span>
+        <span class="g-status">{{ g.disponivel ? 'Disponível' : 'Ocupado' }}</span>
+        <span class="g-ticket" *ngIf="g.ticketAtual">{{ g.ticketAtual.numeracao }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao-hist">
+    <p class="secao-label">ÚLTIMAS SENHAS CHAMADAS</p>
+    <div class="hist-lista">
+      <div class="hist-item" *ngFor="let t of chamadas; let i = index" [ngClass]="t.tipo.toLowerCase()">
+        <span class="h-seq">{{ i + 1 }}º</span>
+        <span class="h-num">{{ t.numeracao }}</span>
+        <span class="h-tipo">{{ t.tipo }}</span>
+        <span class="h-guiche">Guichê {{ t.guiche }}</span>
+        <span class="h-hora">{{ t.dataHoraAtendimento | date:'HH:mm' }}</span>
+      </div>
+      <p class="hist-vazio" *ngIf="chamadas.length === 0">Nenhuma senha chamada ainda.</p>
+    </div>
+  </section>
+</div>
