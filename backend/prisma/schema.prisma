@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ================== USUÁRIO ======================
+
+model User {
+  id        String @id @default(cuid())
+  name      String
+  email     String @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
+
+
+// ==================== TICKET ====================
+// Representa cada senha emitida
+
+
+//cada tipo de senha corresponde a um tipo de consulta
+enum TicketType {
+  SP      //PREFERENCIA
+  SE      //EXAMES
+  SG      //GERAL
+}
+
+// estados de atendimento 
+enum TicketStatus {
+  AGUARDANDO
+  ATENDENDO
+  ATENDIDO
+  NAO_COMPARECEU
+}
+
+enum GuicheStatus {
+  LIVRE
+  OCUPADO
+}
+
+
+model Ticket {
+  id            String   @id @default(cuid())
+  token         String   @unique // Formato: YYMMDD-PPSQ (ex: 260515-SP01)
+  type          TicketType
+  status        TicketStatus
+  
+  // Timestamps
+  createdAt     DateTime @default(now())
+  calledAt      DateTime?
+  missedAt      DateTime?
+  startedAt     DateTime?
+  finishedAt    DateTime?
+  
+  // Relação com guichê
+  guicheId      String?
+  guiche        Guiche?  @relation(fields: [guicheId], references: [id])
+  
+  // Relação com log de atendimento
+  logs LogAtendimento
+  
+  @@index([status, type, createdAt])
+  
+}
+
+// ==================== GUICHE ====================
+// Representa cada guichê (atendente)
+
+model Guiche {
+  id            String   @id @default(cuid())
+  numero        Int      @unique // 1, 2, 3, etc
+  status        GuicheStatus   @default(LIVRE) // LIVRE, OCUPADO
+  
+  // Timestamps
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relação com tickets
+  tickets       Ticket[]
+
+  // Relação com logs
+  logsAtendimento LogAtendimento[]
+  
+  @@index([status])
+}
+
+// ==================== LOG ATENDIMENTO ====================
+// Histórico detalhado de cada atendimento
+model LogAtendimento {
+  id            String   @id @default(cuid())
+  ticketId      String   
+  ticket        Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  
+  guicheId      String
+  guiche        Guiche   @relation(fields: [guicheId], references: [id], onDelete: Cascade)
+  
+  // Tempos
+  startedAt     DateTime
+  finishedAt    DateTime
+  duracao       Int      // Em segundos
+  
+  // Informações adicionais
+  statusFinal   String   // ATENDIDO, NAO_COMPARECEU
+  observacoes   String?  @db.Text
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([ticketId])
+  @@index([guicheId])
+  @@index([createdAt])
+}
